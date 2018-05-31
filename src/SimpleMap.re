@@ -9,6 +9,7 @@ module ComposableMap = {
     projectionConfig: projectionConfigT,
     width: int,
     height: int,
+    style: ReactDOMRe.Style.t,
   };
   [@bs.module "react-simple-maps"]
   external component : ReasonReact.reactClass = "ComposableMap";
@@ -16,6 +17,17 @@ module ComposableMap = {
     ReasonReact.wrapJsForReason(
       ~reactClass=component,
       ~props=jsProps(~projectionConfig, ~width, ~height),
+      children,
+    );
+};
+
+module ZoomableGroup = {
+  [@bs.module "react-simple-maps"]
+  external jsClass : ReasonReact.reactClass = "ZoomableGroup";
+  let make = children =>
+    ReasonReact.wrapJsForReason(
+      ~reactClass=jsClass,
+      ~props=(),
       children,
     );
 };
@@ -56,6 +68,41 @@ module Geography = {
     ReasonReact.wrapJsForReason(
       ~reactClass=component,
       ~props=jsProps(~geography, ~projection, ~style),
+      children,
+    );
+};
+
+module Markers = {
+  [@bs.module "react-simple-maps"]
+  external component : ReasonReact.reactClass = "Markers";
+  let make = children =>
+    ReasonReact.wrapJsForReason(~reactClass=component, ~props=(), children);
+};
+
+module Marker = {
+  [@bs.deriving abstract]
+  type markerT = {
+    coordinates: (float, float),
+    name: string,
+    markerOffset: int,
+  };
+  [@bs.deriving abstract]
+  type styleT = {
+    default: ReactDOMRe.Style.t,
+    hover: ReactDOMRe.Style.t,
+    pressed: ReactDOMRe.Style.t,
+  };
+  [@bs.deriving abstract]
+  type jsProps = {
+    marker: markerT,
+    style: styleT,
+  };
+  [@bs.module "react-simple-maps"]
+  external component : ReasonReact.reactClass = "Marker";
+  let make = (~marker, ~style, children) =>
+    ReasonReact.wrapJsForReason(
+      ~reactClass=component,
+      ~props=jsProps(~marker, ~style),
       children,
     );
 };

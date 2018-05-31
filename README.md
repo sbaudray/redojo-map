@@ -1,5 +1,3 @@
-# Clean version: WIP
-
 Dojo World Edition® starter project
 ---
 
